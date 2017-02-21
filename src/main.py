@@ -5,6 +5,7 @@ from game import *
 import pygame
 import random
 import time
+from road import *
 
 os.environ['SDL_VIDEO_WINDOW_POS'] = "25,25"
 pygame.init()
@@ -12,11 +13,13 @@ screen = pygame.display.set_mode((920,680))
 
 def draw(game):
 	screen.fill(game.background_color)
+	screen.blit(game.road.image, (game.road.x,game.road.y))
 	screen.blit(game.car.image, (game.car.x,game.car.y))
 	screen.blit(game.scoreSurface, (10, 10))
 	pygame.display.flip()
 
 def update(game):
+	game.road.moveDown()
 	return 1
 	
 def handle_input(game):

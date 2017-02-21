@@ -1,5 +1,6 @@
 import pygame
 from car import *
+from road import *
 
 class Game(object):
 	def __init__(self):
@@ -9,3 +10,4 @@ class Game(object):
 		self.scoreSurface = self.myfont.render("Score: " + str(self.score),True,(255,255,255))
 		self.background_color = (0,0,0)
 		self.car = Car()
+		self.road = Road()
