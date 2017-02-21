@@ -5,7 +5,7 @@ class Road(object):
 	def __init__(self,bottom_bound):
 		self.width = 600
 		self.height = 342
-		self.x = 280
+		self.x = 0
 		self.y = -self.height
 		self.y2 = 0 #I figure we have two y values since we'll be recycling two roads like a conveyer belt system, seems like it'd be more succint than making two road objects
 		self.y3 = self.height

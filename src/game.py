@@ -1,6 +1,7 @@
 import pygame
 from car import *
 from road import *
+from pothole import *
 
 class Game(object):
 	def __init__(self, width, height):
@@ -13,3 +14,5 @@ class Game(object):
 		self.background_color = (112,132,55)
 		self.car = Car()
 		self.road = Road(height)
+		self.holelist = []
+		self.hole_counter = 0

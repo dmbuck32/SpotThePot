@@ -14,6 +14,8 @@ class Car(object):
 	
 	def moveLeft(self):
 		self.x -= 2
+		self.rect.x -= 2
 		
 	def moveRight(self):
 		self.x += 2
+		self.rect.x += 2
