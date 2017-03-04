@@ -19,8 +19,16 @@ class Game(object):
 		self.road = Road(width, height, 158, 453)
 		self.holelist = []
 		self.hole_counter = 0
+		self.score_counter_threshold = 200
+		self.score_counter = 0
 		self.initDraw = True
 		self.gameOverState = False
+	
+	def updateScoreCounter(self):
+		self.score_counter += 1
+		if self.score_counter >= self.score_counter_threshold:
+			self.score_counter = 0
+			self.updateScore()
 		
 	def updateScore(self):
 		self.score += 1

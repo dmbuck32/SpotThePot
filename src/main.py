@@ -39,6 +39,7 @@ def draw(game):
 	pygame.display.update(rects)
 
 def update(game):
+	game.updateScoreCounter()
 	game.hole_counter += 1
 	if(game.hole_counter > 400):
 		game.holelist.append(Pothole(game.road.lbound, game.road.rbound))
