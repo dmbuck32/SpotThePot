@@ -16,26 +16,38 @@ pygame.key.set_repeat(10,10)
 screen = pygame.display.set_mode((width,height))
 holelist = []
 hole_counter = 0
+initial_draw = True
+
+def getDrawRectFromCollisionRect(rect, n): #Not tested, may not be working right?
+	drawrect = pygame.Rect(rect.x - n, rect.y - n, rect.width + 2*n, rect.height + 2*n)
+	return drawrect
 
 def draw(game):
-	#screen.fill(game.background_color)
+	if game.initDraw:
+		screen.blit(game.road.image, (game.road.x,game.road.y))
+		game.initDraw = False 
 	screen.blit(game.road.image, (game.road.x,game.road.y))
-	screen.blit(game.road.image, (game.road.x,game.road.y2))
-	screen.blit(game.road.image, (game.road.x,game.road.y3))
 	for hole in game.holelist:
 		screen.blit(hole.image, (hole.x, hole.y))
 	screen.blit(game.car.image, (game.car.x,game.car.y))
 	screen.blit(game.scoreSurface, (10, 10))
+	screen.blit(game.livesSurface, (10, 35))
+	if(game.gameOverState):
+		screen.blit(game.gameOverSurface, (10, 60))
 	pygame.display.flip()
 
 def update(game):
-	game.road.moveDown()
 	game.hole_counter += 1
 	if(game.hole_counter > 400):
 		game.holelist.append(Pothole(game.road.x, game.road.x + game.road.width))
 		game.hole_counter = 0
 	for hole in game.holelist:
 		hole.moveDown()
+	if game.car.collided(game.holelist):
+		game.updateLives()
+		print game.lives
+	if game.lives == 0:
+		return 0
 	return 1
 	
 def handle_keydown(game):
@@ -58,3 +70,6 @@ while 1:
 		loop = update(game)
 		if(loop == 0):
 			break
+	game.gameOverState = True
+	draw(game)
+	time.sleep(5)

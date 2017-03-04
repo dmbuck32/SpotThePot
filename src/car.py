@@ -19,3 +19,10 @@ class Car(object):
 	def moveRight(self):
 		self.x += 2
 		self.rect.x += 2
+		
+	def collided(self, otherlist):
+		for other in otherlist:
+			if other.isCollidable and self.rect.colliderect(other.rect):
+				other.isCollidable = False
+				return True
+		return False
