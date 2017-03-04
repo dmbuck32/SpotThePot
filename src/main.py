@@ -13,7 +13,7 @@ width = 600
 os.environ['SDL_VIDEO_WINDOW_POS'] = "25,25"
 pygame.init()
 pygame.key.set_repeat(10,10)
-screen = pygame.display.set_mode((width,height))
+screen = pygame.display.set_mode((width,height),pygame.DOUBLEBUF)
 holelist = []
 hole_counter = 0
 initial_draw = True
@@ -23,29 +23,32 @@ def getDrawRectFromCollisionRect(rect, n): #Not tested, may not be working right
 	return drawrect
 
 def draw(game):
+	rects = []
 	if game.initDraw:
 		screen.blit(game.road.image, (game.road.x,game.road.y))
+		pygame.display.flip()
 		game.initDraw = False 
 	screen.blit(game.road.image, (game.road.x,game.road.y))
 	for hole in game.holelist:
-		screen.blit(hole.image, (hole.x, hole.y))
-	screen.blit(game.car.image, (game.car.x,game.car.y))
-	screen.blit(game.scoreSurface, (10, 10))
-	screen.blit(game.livesSurface, (10, 35))
+		rects.append(screen.blit(hole.image, (hole.x, hole.y)))
+	rects.append(screen.blit(game.car.image, (game.car.x,game.car.y)))
+	rects.append(screen.blit(game.scoreSurface, (10, 10)))
+	rects.append(screen.blit(game.livesSurface, (10, 35)))
 	if(game.gameOverState):
-		screen.blit(game.gameOverSurface, (10, 60))
-	pygame.display.flip()
+		rects.append(screen.blit(game.gameOverSurface, (10, 60)))
+	pygame.display.update(rects)
 
 def update(game):
 	game.hole_counter += 1
 	if(game.hole_counter > 400):
-		game.holelist.append(Pothole(game.road.x, game.road.x + game.road.width))
+		game.holelist.append(Pothole(game.road.lbound, game.road.rbound))
 		game.hole_counter = 0
 	for hole in game.holelist:
 		hole.moveDown()
+		if hole.y > game.height:
+			game.holelist.remove(hole)
 	if game.car.collided(game.holelist):
 		game.updateLives()
-		print game.lives
 	if game.lives == 0:
 		return 0
 	return 1
@@ -53,9 +56,11 @@ def update(game):
 def handle_keydown(game):
 	keylist = pygame.key.get_pressed()
 	if(keylist[pygame.K_LEFT]):
-		game.car.moveLeft()
+		if(game.car.x > game.road.lbound):
+			game.car.moveLeft()
 	if(keylist[pygame.K_RIGHT]):
-		game.car.moveRight()
+		if(game.car.x + game.car.width < game.road.rbound):
+			game.car.moveRight()
 
 while 1:		
 	game = Game(width, height)		
