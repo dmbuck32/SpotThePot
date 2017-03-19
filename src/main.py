@@ -1,34 +1,150 @@
-import pygame
-import os
+import pygame, os, pygame, random, time, sys
 from car import *
 from game import *
-import pygame
-import random
-import time
 from road import *
 from pothole import *
+from menu import *
 
+# Global Variables
 height = 680
 width = 600
-os.environ['SDL_VIDEO_WINDOW_POS'] = "100,100"
-pygame.init()
-pygame.key.set_repeat(10,10)
-screen = pygame.display.set_mode((width,height),pygame.DOUBLEBUF)
-holelist = []
-hole_counter = 0
-initial_draw = True
-pause_menu = False
-main_menu = True
+
+escape = False
 gameplay = True
-exit = False
-BLACK = (0,0,0)
-WHITE = (255,255,255)
+
+def main():
+	# Window Position Initialization
+	os.environ['SDL_VIDEO_CENTERED'] = '1'
+	# Initialize Pygame
+	pygame.init()
+	
+	
+	screen = pygame.display.set_mode((width,height), pygame.NOFRAME)
+	pygame.display.set_caption("Spot the Pot (c) 2017")
+	pygame.event.set_blocked(pygame.MOUSEMOTION)
+	holelist = []
+	hole_counter = 0
+	BLACK = (0,0,0)
+	WHITE = (255,255,255)
+	
+	initial_draw = True
+	main_menu = True
+	
+	exit = False
+	
+	menu(screen)
+   
+   
+	
+	draw_title_screen(screen)	
+	
+	while main_menu:
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				os._exit(-1)
+			if event.type == pygame.KEYDOWN:
+				handle_menu_keydown()
+				main_menu = False
+
+	
+	
+def menu(screen):
+	# Menu Stuff
+	menu = cMenu(width/2+15, height - 175, 10, 75, 'vertical', 3, screen,
+               [('Start Game', 1, None),
+                ('Options',    2, None),
+                ('Exit',       3, None)])
+				
+	# Center the menu on the draw_surface (the entire screen here)
+	menu.set_center(True, False)
+
+	# Center the menu on the draw_surface (the entire screen here)
+	menu.set_alignment('center', 'center')
+
+	# Create the state variables (make them different so that the user event is
+	# triggered at the start of the "while 1" loop so that the initial display
+	# does not wait for user input)
+	state = 0
+	prev_state = 1
+
+	# rect_list is the list of pygame.Rect's that will tell pygame where to
+	# update the screen (there is no point in updating the entire screen if only
+	# a small portion of it changed!)
+	rect_list = []
+	
+	# Load background image
+	bkg = pygame.image.load('main_menu.png')
+	
+	screen.blit(bkg, (0, 0))
+	pygame.display.flip()
+   
+	# The main while loop
+	while 1:
+		# Check if the state has changed, if it has, then post a user event to
+		# the queue to force the menu to be shown at least once
+		if prev_state != state:
+			pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
+			prev_state = state
+
+		# Get the next event
+		e = pygame.event.wait()
+
+		# Update the menu, based on which "state" we are in - When using the menu
+		# in a more complex program, definitely make the states global variables
+		# so that you can refer to them by a name
+		if e.type == pygame.KEYDOWN or e.type == EVENT_CHANGE_STATE:
+			if state == 0:
+				rect_list, state = menu.update(e, state)
+			elif state == 1:
+				# Set Key Repeat
+				pygame.key.set_repeat(10, 10)
+				game(screen)
+				# remove Key Repeat
+				pygame.key.set_repeat()	
+				screen.blit(bkg, (0, 0))
+				pygame.display.flip()
+				state = 0
+			elif state == 2:
+				print 'Options!'
+				state = 0				
+			else:
+				pygame.quit()
+				sys.exit()
+
+		# Quit if the user presses the exit button
+		if e.type == pygame.QUIT:
+			pygame.quit()
+			sys.exit()
+
+		# Update the screen
+		pygame.display.update(rect_list)
+		
+def game(screen):
+	global gameplay
+	while gameplay:		
+		game = Game(width, height)		
+		loop = True
+		while loop:
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					os._exit(-1)
+				if event.type == pygame.KEYDOWN:
+					handle_keydown(game)
+			draw(screen, game)
+			loop = update(game)
+			if(not loop):
+				break
+			if escape:
+				while escape:
+					print "paused"
+		game.gameOverState = True
+		gameplay = False
 
 def getDrawRectFromCollisionRect(rect, n): #Not tested, may not be working right?
 	drawrect = pygame.Rect(rect.x - n, rect.y - n, rect.width + 2*n, rect.height + 2*n)
 	return drawrect
 
-def draw(game):
+def draw(screen, game):
 	rects = []
 	if game.initDraw:
 		screen.blit(game.road.image, (game.road.x,game.road.y))
@@ -61,9 +177,10 @@ def update(game):
 	return 1
 	
 def handle_keydown(game):
+	global escape
 	keylist = pygame.key.get_pressed()
 	if(keylist[pygame.K_ESCAPE]):
-		pause_menu = not pause_menu
+		escape is not escape
 	if(keylist[pygame.K_LEFT]):
 		if(game.car.x > game.road.lbound):
 			game.car.moveLeft()
@@ -91,30 +208,6 @@ def draw_title_screen(screen):
 	screen.blit(titleScreen2, titleRect2)
 	pygame.display.flip()
 
-draw_title_screen(screen)	
-while main_menu:
-	for event in pygame.event.get():
-		if event.type == pygame.QUIT:
-			os._exit(-1)
-		if event.type == pygame.KEYDOWN:
-			handle_menu_keydown()
-			main_menu = False
-
-while gameplay:		
-	game = Game(width, height)		
-	loop = True
-	while loop:
-		for event in pygame.event.get():
-			if event.type == pygame.QUIT:
-				os._exit(-1)
-			if event.type == pygame.KEYDOWN:
-				handle_keydown(game)
-		draw(game)
-		loop = update(game)
-		if(not loop):
-			break
-		if pause_menu:
-			draw_title_screen()
-	game.gameOverState = True
-	draw(game)
-	time.sleep(5)
+# Run the script
+if __name__ == "__main__":
+   main()
