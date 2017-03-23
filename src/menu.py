@@ -151,8 +151,8 @@ class cMenu:
 
       self.selection = 0                        # The currently selected button
       self.u_color = WHITE                      # Color for unselected text
-      self.s_color = RED                        # Color for selected text
-      self.image_highlight_color = BLUE         # Color for the image highlights
+      self.s_color = BLUE                        # Color for selected text
+      self.image_highlight_color = RED         # Color for the image highlights
       self.image_highlight_offset = 2           # Addition padding around image
                                                 # buttons only for the highlight
 
