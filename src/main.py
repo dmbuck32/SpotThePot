@@ -9,6 +9,8 @@ from menu import *
 height = 680
 width = 600
 
+clk = pygame.time.Clock()
+FPS = 120
 paused = False
 
 def main():
@@ -249,6 +251,7 @@ def game(screen):
 			pygame.key.set_repeat(10, 10)
 		draw(screen, game)
 		loop = update(game)
+		clk.tick(FPS)
 		if(not loop):
 			pygame.key.set_repeat()	
 			gameOverMenu(screen)
