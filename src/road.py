@@ -9,5 +9,5 @@ class Road(object):
 		self.y = 0
 		self.lbound = lbound
 		self.rbound = rbound
-		self.image = pygame.transform.scale(pygame.image.load('Images\gameface.png').convert_alpha(),(self.width,self.height))
+		self.image = pygame.transform.scale(pygame.image.load('Images/gameface.png').convert_alpha(),(self.width,self.height))
 			

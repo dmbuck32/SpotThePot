@@ -112,7 +112,7 @@ def pauseMenu(screen):
 	global paused
 	
 	# Load background image
-	bkg = pygame.image.load('Images\pause.png')
+	bkg = pygame.image.load('Images/pause.png')
 	
 	screen.blit(bkg, (0,0))
 	pygame.display.flip
