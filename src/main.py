@@ -38,7 +38,7 @@ def main():
 	
 def menu(screen):
 	# Load background image
-	bkg = pygame.image.load('Images\main_menu.png')
+	bkg = pygame.image.load('Images/main_menu.png')
 
 	screen.blit(bkg, (0,0))
 	pygame.display.flip
