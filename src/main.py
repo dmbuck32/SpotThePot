@@ -6,8 +6,9 @@ from pothole import *
 from menu import *
 
 # Global Variables
-height = 680
-width = 600
+height = 800
+width = 480
+timeUntilNextObstacle = 0
 
 clk = pygame.time.Clock()
 FPS = 120
@@ -33,7 +34,9 @@ def main():
 	
 	initial_draw = True
 	main_menu = True
+	
 	exit = False
+	
 	menu(screen)
 	
 def menu(screen):
@@ -240,6 +243,9 @@ def game(screen):
 				os._exit(-1)
 			if event.type == pygame.KEYDOWN:
 				handle_keydown(game)
+			else:
+				game.car.isMovingLeft = False
+				game.car.isMovingRight = False
 		keys = pygame.key.get_pressed()
 		if keys[pygame.K_ESCAPE]:
 			pygame.key.set_repeat() 
@@ -269,9 +275,16 @@ def draw(screen, game):
 		pygame.display.flip()
 		game.initDraw = False 
 	screen.blit(game.road.image, (game.road.x,game.road.y))
+	rects.append(screen.blit(game.road.image, (game.road.x, game.road.y)))
+	pygame.time.delay(2)
 	for hole in game.holelist:
 		rects.append(screen.blit(hole.image, (hole.x, hole.y)))
-	rects.append(screen.blit(game.car.image, (game.car.x,game.car.y)))
+	if((game.car.isMovingRight) == True):
+		rects.append(screen.blit(game.car.image_right, (game.car.x,game.car.y)))
+	elif((game.car.isMovingLeft) == True):
+		rects.append(screen.blit(game.car.image_left, (game.car.x,game.car.y)))
+	else:
+		rects.append(screen.blit(game.car.image, (game.car.x,game.car.y)))	
 	rects.append(screen.blit(game.scoreSurface, (10, 10)))
 	rects.append(screen.blit(game.livesSurface, (10, 35)))
 	if(game.gameOverState):
@@ -279,11 +292,13 @@ def draw(screen, game):
 	pygame.display.update(rects)
 
 def update(game):
+	global timeUntilNextObstacle 
 	game.updateScoreCounter()
 	game.hole_counter += 1
-	if(game.hole_counter > 400):
-		game.holelist.append(Pothole(game.road.lbound, game.road.rbound))
+	if(game.hole_counter > timeUntilNextObstacle):
+		game.holelist.append(Pothole(game.road.lbound, game.road.rbound, choose_obstacle()))
 		game.hole_counter = 0
+		timeUntilNextObstacle = random.randint(80,170)
 	for hole in game.holelist:
 		hole.moveDown()
 		if hole.y > game.height:
@@ -295,16 +310,25 @@ def update(game):
 	return 1
 	
 def handle_keydown(game):
-	#global paused
 	keylist = pygame.key.get_pressed()
-	#if(keylist[pygame.K_ESCAPE]):
-		#paused = True
 	if(keylist[pygame.K_LEFT]):
 		if(game.car.x > game.road.lbound):
 			game.car.moveLeft()
 	if(keylist[pygame.K_RIGHT]):
 		if(game.car.x + game.car.width < game.road.rbound):
 			game.car.moveRight()
+			
+def choose_obstacle():
+	choice = random.randint(1,8)
+	if (choice == 0):return 'Images/pothole.png'
+	if (choice == 1):return 'Images/pothole1.png'
+	if (choice == 2):return 'Images/pothole2.png'
+	if (choice == 3):return 'Images/pothole3.png'
+	if (choice == 4):return 'Images/pothole4.png'
+	if (choice == 5):return 'Images/bottle1.png'
+	if (choice == 6):return 'Images/bottle2.png'
+	if (choice == 7):return 'Images/mouse.png'
+	if (choice == 8):return 'Images/ambulance.png'
 			
 # Run the script
 if __name__ == "__main__":

@@ -16,7 +16,7 @@ class Game(object):
 		self.gameOverSurface = self.myfont.render("Game Over",True,(255,255,255))
 		self.background_color = (112,132,55)
 		self.car = Car()
-		self.road = Road(width, height, 158, 453)
+		self.road = Road(width, height, 100, 370)
 		self.holelist = []
 		self.hole_counter = 0
 		self.score_counter_threshold = 200

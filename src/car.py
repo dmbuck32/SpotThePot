@@ -3,22 +3,28 @@ import os
 
 class Car(object):
 	def __init__(self):
-		self.x = 280
-		self.y = 450
+		self.x = 190
+		self.y = 650
 		self.width = 100
 		self.height = 100
 		self.rect = pygame.Rect(self.x + 15,self.y + 15,self.width - 30,self.height - 30)
-		self.image = pygame.transform.scale(pygame.image.load('Images/car.png').convert_alpha(),(self.width,self.height))
+		self.image = pygame.transform.scale(pygame.image.load('Images/car.png').convert_alpha(),(self.width-12,self.height-12))
+		self.image_left = pygame.transform.scale(pygame.image.load('Images/car_left.png').convert_alpha(),(self.width,self.height))
+		self.image_right = pygame.transform.scale(pygame.image.load('Images/car_right.png').convert_alpha(),(self.width,self.height))
 		self.isMovingLeft = False
 		self.isMovingRight = False
 	
 	def moveLeft(self):
-		self.x -= 2
-		self.rect.x -= 2
+		self.isMovingRight = False
+		self.isMovingLeft = True
+		self.x -= 3
+		self.rect.x -= 3
 		
 	def moveRight(self):
-		self.x += 2
-		self.rect.x += 2
+		self.isMovingLeft = False
+		self.isMovingRight = True
+		self.x += 3
+		self.rect.x += 3
 		
 	def collided(self, otherlist):
 		for other in otherlist:
