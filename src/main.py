@@ -14,6 +14,11 @@ clk = pygame.time.Clock()
 FPS = 120
 paused = False
 
+#SELECTED = (15,61,86)
+SELECTED = (0,0,0)
+#UNSELECTED = (36,122,171)
+UNSELECTED = (255,255,255)
+
 def main():
 	# Window Position Initialization
 	os.environ['SDL_VIDEO_CENTERED'] = '1'
@@ -26,11 +31,7 @@ def main():
 	pygame.event.set_blocked(pygame.MOUSEMOTION)
 	# Pothole Mechnics
 	holelist = []
-	hole_counter = 0
-	# Color Constants
-	BLACK = (0,0,0)
-	WHITE = (255,255,255)
-	
+	hole_counter = 0	
 	
 	initial_draw = True
 	main_menu = True
@@ -42,8 +43,11 @@ def main():
 def menu(screen):
 	# Load background image
 	bkg = pygame.image.load('Images/main_menu.png')
+	button = pygame.image.load('Images/button.png')
 
 	screen.blit(bkg, (0,0))
+	screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 215))
+	screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 115))
 	pygame.display.flip
 	
 	# Menu Stuff
@@ -57,6 +61,8 @@ def menu(screen):
 
 	# Center the menu on the draw_surface (the entire screen here)
 	menu.set_alignment('center', 'center')
+	menu.set_selected_color(SELECTED)
+	menu.set_unselected_color(UNSELECTED)
 
 	# Create the state variables (make them different so that the user event is
 	# triggered at the start of the "while 1" loop so that the initial display
@@ -70,6 +76,8 @@ def menu(screen):
 	rect_list = []
 	
 	screen.blit(bkg, (0, 0))
+	screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 225))
+	screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 125))
 	pygame.display.flip()
    
 	# The main while loop
@@ -96,6 +104,8 @@ def menu(screen):
 				# remove Key Repeat
 				pygame.key.set_repeat()	
 				screen.blit(bkg, (0, 0))
+				screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 225))
+				screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 125))
 				pygame.display.flip()
 				state = 0
 			elif state == 2:
@@ -118,8 +128,11 @@ def pauseMenu(screen):
 	
 	# Load background image
 	bkg = pygame.image.load('Images/pause.png')
+	button = pygame.image.load('Images/button.png')
 	
 	screen.blit(bkg, (0,0))
+	screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 215))
+	screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 115))
 	pygame.display.flip
 	
 	# Menu Stuff
@@ -132,6 +145,8 @@ def pauseMenu(screen):
 
 	# Center the menu on the draw_surface (the entire screen here)
 	menu.set_alignment('center', 'center')
+	menu.set_selected_color(SELECTED)
+	menu.set_unselected_color(UNSELECTED)
 
 	# Create the state variables (make them different so that the user event is
 	# triggered at the start of the "while 1" loop so that the initial display
@@ -145,6 +160,8 @@ def pauseMenu(screen):
 	rect_list = []
 	
 	screen.blit(bkg, (0, 0))
+	screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 215))
+	screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 115))
 	pygame.display.flip()
    
 	# The main while loop
@@ -177,8 +194,11 @@ def pauseMenu(screen):
 def gameOverMenu(screen):	
 	# Load background image
 	bkg = pygame.image.load('Images\game_over.png')
+	button = pygame.image.load('Images/button.png')
 	
 	screen.blit(bkg, (0,0))
+	screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 215))
+	screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 115))
 	pygame.display.flip
 	
 	# Menu Stuff
@@ -191,6 +211,8 @@ def gameOverMenu(screen):
 
 	# Center the menu on the draw_surface (the entire screen here)
 	menu.set_alignment('center', 'center')
+	menu.set_selected_color(SELECTED)
+	menu.set_unselected_color(UNSELECTED)
 
 	# Create the state variables (make them different so that the user event is
 	# triggered at the start of the "while 1" loop so that the initial display
@@ -204,6 +226,8 @@ def gameOverMenu(screen):
 	rect_list = []
 	
 	screen.blit(bkg, (0, 0))
+	screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 215))
+	screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 115))
 	pygame.display.flip()
    
 	# The main while loop
