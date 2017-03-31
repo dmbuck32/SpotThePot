@@ -14,10 +14,13 @@ clk = pygame.time.Clock()
 FPS = 120
 paused = False
 
-#SELECTED = (15,61,86)
-SELECTED = (0,0,0)
+menuFont = 'ethnocentric.ttf'
+
+SELECTED = (15,61,86)
+#SELECTED = (0,0,0)
 #UNSELECTED = (36,122,171)
 UNSELECTED = (255,255,255)
+THICKNESS = 5
 
 def main():
 	# Window Position Initialization
@@ -43,26 +46,31 @@ def main():
 def menu(screen):
 	# Load background image
 	bkg = pygame.image.load('Images/main_menu.png')
-	button = pygame.image.load('Images/button.png')
+	exit_button = pygame.image.load('Images/button.png')
+	start_button = pygame.image.load('Images/start_button.png')
+	FAQ_button = pygame.image.load('Images/FAQ_button.png')
+	high_scores_button = pygame.image.load('Images/high_scores_button.png')
 
 	screen.blit(bkg, (0,0))
-	screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 215))
-	screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 115))
+	#screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 215))
+	#screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 115))
 	pygame.display.flip
-	
+
 	# Menu Stuff
-	menu = cMenu(width/2+15, height - 175, 10, 75, 'vertical', 3, screen,
-               [('Start Game', 1, None),
-                #('Options',    2, None),
-                ('Exit',       3, None)])
+	menu = cMenu(width/2, height - 200, 0, 0, 'vertical', 4, screen,
+			   [('Start Game', 1, start_button),
+				('FAQ', 2, FAQ_button),
+				('High Scores', 3, high_scores_button),
+				('Exit', 4, exit_button)])
 				
 	# Center the menu on the draw_surface (the entire screen here)
 	menu.set_center(True, False)
-
+	
 	# Center the menu on the draw_surface (the entire screen here)
 	menu.set_alignment('center', 'center')
-	menu.set_selected_color(SELECTED)
-	menu.set_unselected_color(UNSELECTED)
+	
+	menu.set_image_highlight_color(SELECTED)
+	menu.set_image_highlight_thickness(THICKNESS)
 
 	# Create the state variables (make them different so that the user event is
 	# triggered at the start of the "while 1" loop so that the initial display
@@ -74,12 +82,10 @@ def menu(screen):
 	# update the screen (there is no point in updating the entire screen if only
 	# a small portion of it changed!)
 	rect_list = []
-	
+
 	screen.blit(bkg, (0, 0))
-	screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 225))
-	screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 125))
 	pygame.display.flip()
-   
+
 	# The main while loop
 	while 1:
 		# Check if the state has changed, if it has, then post a user event to
@@ -104,13 +110,14 @@ def menu(screen):
 				# remove Key Repeat
 				pygame.key.set_repeat()	
 				screen.blit(bkg, (0, 0))
-				screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 225))
-				screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 125))
 				pygame.display.flip()
 				state = 0
 			elif state == 2:
-				print 'Options!'
-				state = 0				
+				faqMenu(screen)
+				state = 0	
+			elif state == 3:
+				highScoreMenu(screen)
+				state = 0
 			else:
 				pygame.quit()
 				sys.exit()
@@ -128,25 +135,26 @@ def pauseMenu(screen):
 	
 	# Load background image
 	bkg = pygame.image.load('Images/pause.png')
-	button = pygame.image.load('Images/button.png')
+	exit_button = pygame.image.load('Images/button.png')
+	resume_button = pygame.image.load('Images/resume_button.png')
 	
 	screen.blit(bkg, (0,0))
-	screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 215))
-	screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 115))
 	pygame.display.flip
 	
 	# Menu Stuff
-	menu = cMenu(width/2+15, height - 175, 10, 75, 'vertical', 2, screen,
-               [('Resume', 1, None),
-			    ('Quit', 2, None)])
+	menu = cMenu(width/2, height - 175, 0, 0, 'vertical', 2, screen,
+               [('Resume', 1, resume_button),
+			    ('Quit', 2, exit_button)])
 				
 	# Center the menu on the draw_surface (the entire screen here)
 	menu.set_center(True, False)
-
+	# Menu Font
+	menu.set_font(pygame.font.Font(menuFont, 20))
 	# Center the menu on the draw_surface (the entire screen here)
 	menu.set_alignment('center', 'center')
-	menu.set_selected_color(SELECTED)
-	menu.set_unselected_color(UNSELECTED)
+	
+	menu.set_image_highlight_color(SELECTED)
+	menu.set_image_highlight_thickness(THICKNESS)
 
 	# Create the state variables (make them different so that the user event is
 	# triggered at the start of the "while 1" loop so that the initial display
@@ -160,8 +168,6 @@ def pauseMenu(screen):
 	rect_list = []
 	
 	screen.blit(bkg, (0, 0))
-	screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 215))
-	screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 115))
 	pygame.display.flip()
    
 	# The main while loop
@@ -194,25 +200,26 @@ def pauseMenu(screen):
 def gameOverMenu(screen):	
 	# Load background image
 	bkg = pygame.image.load('Images\game_over.png')
-	button = pygame.image.load('Images/button.png')
+	exit_button = pygame.image.load('Images/button.png')
+	new_game_button = pygame.image.load('Images/new_game_button.png')
 	
 	screen.blit(bkg, (0,0))
-	screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 215))
-	screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 115))
 	pygame.display.flip
 	
 	# Menu Stuff
-	menu = cMenu(width/2+15, height - 175, 10, 75, 'vertical', 2, screen,
-               [('New Game?', 1, None),
-			    ('Quit', 2, None)])
+	menu = cMenu(width/2, height - 150, 0, 0, 'vertical', 2, screen,
+               [('New Game', 1, new_game_button),
+			    ('Quit', 2, exit_button)])
 				
 	# Center the menu on the draw_surface (the entire screen here)
 	menu.set_center(True, False)
-
+	# Menu Font
+	menu.set_font(pygame.font.Font(menuFont, 20))
 	# Center the menu on the draw_surface (the entire screen here)
 	menu.set_alignment('center', 'center')
-	menu.set_selected_color(SELECTED)
-	menu.set_unselected_color(UNSELECTED)
+	
+	menu.set_image_highlight_color(SELECTED)
+	menu.set_image_highlight_thickness(THICKNESS)
 
 	# Create the state variables (make them different so that the user event is
 	# triggered at the start of the "while 1" loop so that the initial display
@@ -226,8 +233,6 @@ def gameOverMenu(screen):
 	rect_list = []
 	
 	screen.blit(bkg, (0, 0))
-	screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 215))
-	screen.blit(button, (width/2 - button.get_width()/2, height - button.get_height()/2  - 115))
 	pygame.display.flip()
    
 	# The main while loop
@@ -249,6 +254,128 @@ def gameOverMenu(screen):
 				rect_list, state = menu.update(e, state)
 			elif state == 1:
 				game.gameOverState = True
+				break
+			else:
+				pygame.quit()
+				sys.exit()
+				
+		# Update the screen
+		pygame.display.update(rect_list)
+		
+def faqMenu(screen):
+	bkg = pygame.image.load('Images/main_menu.png')
+	back_button = pygame.image.load('Images/button.png')
+	
+	screen.blit(bkg, (0,0))
+	pygame.display.flip
+	
+	# Menu Stuff
+	menu = cMenu(width/2, height - 150, 0, 0, 'vertical', 1, screen,
+               [('Back', 1, back_button)])
+				
+	# Center the menu on the draw_surface (the entire screen here)
+	menu.set_center(True, False)
+	# Menu Font
+	menu.set_font(pygame.font.Font(menuFont, 20))
+	# Center the menu on the draw_surface (the entire screen here)
+	menu.set_alignment('center', 'center')
+	
+	menu.set_image_highlight_color(SELECTED)
+	menu.set_image_highlight_thickness(THICKNESS)
+
+	# Create the state variables (make them different so that the user event is
+	# triggered at the start of the "while 1" loop so that the initial display
+	# does not wait for user input)
+	state = 0
+	prev_state = 1
+
+	# rect_list is the list of pygame.Rect's that will tell pygame where to
+	# update the screen (there is no point in updating the entire screen if only
+	# a small portion of it changed!)
+	rect_list = []
+	
+	screen.blit(bkg, (0, 0))
+	pygame.display.flip()
+   
+	# The main while loop
+	while 1:
+		# Check if the state has changed, if it has, then post a user event to
+		# the queue to force the menu to be shown at least once
+		if prev_state != state:
+			pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
+			prev_state = state
+
+		# Get the next event
+		e = pygame.event.wait()
+
+		# Update the menu, based on which "state" we are in - When using the menu
+		# in a more complex program, definitely make the states global variables
+		# so that you can refer to them by a name
+		if e.type == pygame.KEYDOWN or e.type == EVENT_CHANGE_STATE:
+			if state == 0:
+				rect_list, state = menu.update(e, state)
+			elif state == 1:
+				break
+			else:
+				pygame.quit()
+				sys.exit()
+				
+		# Update the screen
+		pygame.display.update(rect_list)
+		
+def highScoreMenu(screen):
+	bkg = pygame.image.load('Images/main_menu.png')
+	back_button = pygame.image.load('Images/button.png')
+	
+	screen.blit(bkg, (0,0))
+	pygame.display.flip
+	
+	# Menu Stuff
+	menu = cMenu(width/2, height - 150, 0, 0, 'vertical', 1, screen,
+               [('Back', 1, back_button)])
+				
+	# Center the menu on the draw_surface (the entire screen here)
+	menu.set_center(True, False)
+	# Menu Font
+	menu.set_font(pygame.font.Font(menuFont, 20))
+	# Center the menu on the draw_surface (the entire screen here)
+	menu.set_alignment('center', 'center')
+	
+	menu.set_image_highlight_color(SELECTED)
+	menu.set_image_highlight_thickness(THICKNESS)
+
+	# Create the state variables (make them different so that the user event is
+	# triggered at the start of the "while 1" loop so that the initial display
+	# does not wait for user input)
+	state = 0
+	prev_state = 1
+
+	# rect_list is the list of pygame.Rect's that will tell pygame where to
+	# update the screen (there is no point in updating the entire screen if only
+	# a small portion of it changed!)
+	rect_list = []
+	
+	screen.blit(bkg, (0, 0))
+	pygame.display.flip()
+   
+	# The main while loop
+	while 1:
+		# Check if the state has changed, if it has, then post a user event to
+		# the queue to force the menu to be shown at least once
+		if prev_state != state:
+			pygame.event.post(pygame.event.Event(EVENT_CHANGE_STATE, key = 0))
+			prev_state = state
+
+		# Get the next event
+		e = pygame.event.wait()
+
+		# Update the menu, based on which "state" we are in - When using the menu
+		# in a more complex program, definitely make the states global variables
+		# so that you can refer to them by a name
+		if e.type == pygame.KEYDOWN or e.type == EVENT_CHANGE_STATE:
+			if state == 0:
+				rect_list, state = menu.update(e, state)
+			elif state == 1:
 				break
 			else:
 				pygame.quit()
