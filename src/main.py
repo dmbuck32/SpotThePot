@@ -14,8 +14,6 @@ clk = pygame.time.Clock()
 FPS = 120
 paused = False
 
-menuFont = 'ethnocentric.ttf'
-
 SELECTED = (15,61,86)
 #SELECTED = (0,0,0)
 #UNSELECTED = (36,122,171)
@@ -148,8 +146,7 @@ def pauseMenu(screen):
 				
 	# Center the menu on the draw_surface (the entire screen here)
 	menu.set_center(True, False)
-	# Menu Font
-	menu.set_font(pygame.font.Font(menuFont, 20))
+
 	# Center the menu on the draw_surface (the entire screen here)
 	menu.set_alignment('center', 'center')
 	
@@ -190,6 +187,9 @@ def pauseMenu(screen):
 			elif state == 1:
 				paused = False
 				break
+			elif state == 2:
+				pygame.quit()
+				sys.exit()
 			else:
 				pygame.quit()
 				sys.exit()
@@ -213,8 +213,7 @@ def gameOverMenu(screen):
 				
 	# Center the menu on the draw_surface (the entire screen here)
 	menu.set_center(True, False)
-	# Menu Font
-	menu.set_font(pygame.font.Font(menuFont, 20))
+
 	# Center the menu on the draw_surface (the entire screen here)
 	menu.set_alignment('center', 'center')
 	
@@ -275,8 +274,7 @@ def faqMenu(screen):
 				
 	# Center the menu on the draw_surface (the entire screen here)
 	menu.set_center(True, False)
-	# Menu Font
-	menu.set_font(pygame.font.Font(menuFont, 20))
+
 	# Center the menu on the draw_surface (the entire screen here)
 	menu.set_alignment('center', 'center')
 	
@@ -336,8 +334,7 @@ def highScoreMenu(screen):
 				
 	# Center the menu on the draw_surface (the entire screen here)
 	menu.set_center(True, False)
-	# Menu Font
-	menu.set_font(pygame.font.Font(menuFont, 20))
+
 	# Center the menu on the draw_surface (the entire screen here)
 	menu.set_alignment('center', 'center')
 	
