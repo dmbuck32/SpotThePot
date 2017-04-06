@@ -51,6 +51,7 @@ class Game(object):
 			self.levelUpMessageSurface = self.myfont.render("NEXT LEVEL!", True, (255,215, 0))
 			if self.level > 1 and self.level % 5 == 0:
 				self.lives += 1 # Bonus life every 5 levels
+				self.livesSurface = self.myfont.render("Lives: " + str(self.lives),True,(255,255,255))
 				self.bonusLifeSurface = pygame.font.SysFont('Aria', 25).render("Bonus Life!", True, (255,215,0))
 			else: 
 				self.bonusLifeSurface = self.myfont.render("", True, (255,215,0))
@@ -58,7 +59,7 @@ class Game(object):
 				self.minTime -= 25
 				self.maxTime -= 30
 			self.levelSurface = self.myfont.render("Level: "+ str(self.level), False, (255,255,255))
-			print "minTime: %d\nmaxTime: %d" %(self.minTime, self.maxTime)
+			#print "minTime: %d\nmaxTime: %d" %(self.minTime, self.maxTime)
 		else:
 			self.levelUpMessageSurface = self.myfont.render("", True, (255,215, 0))
 			self.bonusLifeSurface = self.myfont.render("", True, (255,215,0))
