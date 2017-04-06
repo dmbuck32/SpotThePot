@@ -435,6 +435,9 @@ def draw(screen, game):
 		rects.append(screen.blit(game.car.image, (game.car.x,game.car.y)))	
 	rects.append(screen.blit(game.scoreSurface, (10, 10)))
 	rects.append(screen.blit(game.livesSurface, (10, 35)))
+	rects.append(screen.blit(game.levelSurface, (10, 60)))
+	rects.append(screen.blit(game.levelUpMessageSurface, (width/2 - 75, height/2)))
+	rects.append(screen.blit(game.bonusLifeSurface, (width/2 - 50, height/2+35)))
 	if(game.gameOverState):
 		rects.append(screen.blit(game.gameOverSurface, (10, 60)))
 	pygame.display.update(rects)
@@ -446,7 +449,7 @@ def update(game):
 	if(game.hole_counter > timeUntilNextObstacle):
 		game.holelist.append(Pothole(game.road.lbound, game.road.rbound, choose_obstacle()))
 		game.hole_counter = 0
-		timeUntilNextObstacle = random.randint(80,170)
+		timeUntilNextObstacle = random.randint(game.minTime,game.maxTime) # I think this should get harder with the levels
 	for hole in game.holelist:
 		hole.moveDown()
 		if hole.y > game.height:
