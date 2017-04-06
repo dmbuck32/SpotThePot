@@ -1,8 +1,8 @@
-import pygame, os, pygame, random, time, sys
+import pygame, os, random, time, sys
 from car import *
 from game import *
 from road import *
-from pothole import *
+from obstacle import *
 from menu import *
 
 # Global Variables
@@ -14,10 +14,10 @@ clk = pygame.time.Clock()
 FPS = 120
 paused = False
 
-SELECTED = (15,61,86)
-#SELECTED = (0,0,0)
+#SELECTED = (15,61,86)
+SELECTED = (0,0,0)
 #UNSELECTED = (36,122,171)
-UNSELECTED = (255,255,255)
+#UNSELECTED = (255,255,255)
 THICKNESS = 5
 
 def main():
@@ -447,7 +447,17 @@ def update(game):
 	game.updateScoreCounter()
 	game.hole_counter += 1
 	if(game.hole_counter > timeUntilNextObstacle):
-		game.holelist.append(Pothole(game.road.lbound, game.road.rbound, choose_obstacle()))
+		obstacle_name = choose_obstacle()
+		size = (50,50)
+		if (obstacle_name == 'Images/ambulance.png'):
+			size = (50,100)
+		elif (obstacle_name == 'Images/bottle1.png'):
+			size = (30,30)
+		elif (obstacle_name == 'Images/bottle2.png'):
+			size = (32,16)
+		elif (obstacle_name == 'Images/mouse.png'):
+			size = (20,20)
+		game.holelist.append(Obstacle(game.road.lbound, game.road.rbound, obstacle_name, size))
 		game.hole_counter = 0
 		timeUntilNextObstacle = random.randint(game.minTime,game.maxTime) # I think this should get harder with the levels
 	for hole in game.holelist:
