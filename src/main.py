@@ -44,7 +44,7 @@ def main():
 def menu(screen):
 	# Load background image
 	bkg = pygame.image.load('Images/main_menu.png')
-	exit_button = pygame.image.load('Images/button.png')
+	exit_button = pygame.image.load('Images/exit_button.png')
 	start_button = pygame.image.load('Images/start_button.png')
 	FAQ_button = pygame.image.load('Images/FAQ_button.png')
 	high_scores_button = pygame.image.load('Images/high_scores_button.png')
@@ -133,7 +133,7 @@ def pauseMenu(screen):
 	
 	# Load background image
 	bkg = pygame.image.load('Images/pause.png')
-	exit_button = pygame.image.load('Images/button.png')
+	exit_button = pygame.image.load('Images/exit_button.png')
 	resume_button = pygame.image.load('Images/resume_button.png')
 	
 	screen.blit(bkg, (0,0))
@@ -200,7 +200,7 @@ def pauseMenu(screen):
 def gameOverMenu(screen):	
 	# Load background image
 	bkg = pygame.image.load('Images\game_over.png')
-	exit_button = pygame.image.load('Images/button.png')
+	exit_button = pygame.image.load('Images/exit_button.png')
 	new_game_button = pygame.image.load('Images/new_game_button.png')
 	
 	screen.blit(bkg, (0,0))
