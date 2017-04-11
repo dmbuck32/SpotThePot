@@ -7,7 +7,7 @@ class Game(object):
 	def __init__(self, width, height):
 		self.height = height
 		self.width = width
-		self.score = 0
+		self.score = 1
 		self.lives = 4
 		pygame.font.init()
 		self.myfont = pygame.font.SysFont('Arial',30)
