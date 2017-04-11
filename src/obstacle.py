@@ -15,13 +15,13 @@ class Obstacle(object):
 		self.isCollidable = True
 		self.name = name
 	
-	def moveDown(self):
+	def moveDown(self,speed):
 		if (self.name == 'Images/ambulance.png'):
-			self.y += 2
-			self.rect.y += 2
+			self.y += speed + 2
+			self.rect.y += speed + 2
 		else:
-			self.y += 1
-			self.rect.y += 1
+			self.y += speed + 1
+			self.rect.y += speed + 1
 		
 	
 	

@@ -424,7 +424,7 @@ def draw(screen, game):
 		game.initDraw = False 
 	screen.blit(game.road.image, (game.road.x,game.road.y))
 	rects.append(screen.blit(game.road.image, (game.road.x, game.road.y)))
-	pygame.time.delay(2)
+#	pygame.time.delay(2)
 	for hole in game.holelist:
 		rects.append(screen.blit(hole.image, (hole.x, hole.y)))
 	if((game.car.isMovingRight) == True):
@@ -459,9 +459,10 @@ def update(game):
 			size = (20,20)
 		game.holelist.append(Obstacle(game.road.lbound, game.road.rbound, obstacle_name, size))
 		game.hole_counter = 0
-		timeUntilNextObstacle = random.randint(game.minTime,game.maxTime) # I think this should get harder with the levels
+		timeUntilNextObstacle = random.randint((80-(game.score*2)),(170-(game.score*4)))
+		#timeUntilNextObstacle = random.randint(game.minTime,game.maxTime) # I think this should get harder with the levels
 	for hole in game.holelist:
-		hole.moveDown()
+		hole.moveDown(game.score/game.scoreLevelUpdater)
 		if hole.y > game.height:
 			game.holelist.remove(hole)
 	if game.car.collided(game.holelist):
@@ -474,10 +475,10 @@ def handle_keydown(game):
 	keylist = pygame.key.get_pressed()
 	if(keylist[pygame.K_LEFT]):
 		if(game.car.x > game.road.lbound):
-			game.car.moveLeft()
+			game.car.moveLeft(game.score/game.scoreLevelUpdater)
 	if(keylist[pygame.K_RIGHT]):
 		if(game.car.x + game.car.width < game.road.rbound):
-			game.car.moveRight()
+			game.car.moveRight(game.score/game.scoreLevelUpdater)
 			
 def choose_obstacle():
 	choice = random.randint(1,8)

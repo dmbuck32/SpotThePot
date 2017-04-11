@@ -7,7 +7,7 @@ class Game(object):
 	def __init__(self, width, height):
 		self.height = height
 		self.width = width
-		self.score = 0
+		self.score = 1
 		self.lives = 4
 		self.level = 1
 		self.minTime = 200
@@ -30,6 +30,7 @@ class Game(object):
 		self.score_counter = 0
 		self.initDraw = True
 		self.gameOverState = False
+		self.scoreLevelUpdater = 15
 	
 	def updateScoreCounter(self):
 		self.score_counter += 1
@@ -60,7 +61,7 @@ class Game(object):
 		self.livesSurface = self.myfont.render("Lives: " + str(self.lives),True,(255,255,255))
 		
 	def updateLevel(self):
-		if ((self.score > 0) and (self.score % 15 == 0)):
+		if ((self.score > 0) and (self.score % self.scoreLevelUpdater == 0)):
 			self.level += 1
 			self.levelUpMessageSurface = self.myfont.render("NEXT LEVEL!", True, (255,215, 0))
 			if self.level > 1 and self.level % 5 == 0 and self.lives < 4:
