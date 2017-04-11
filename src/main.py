@@ -434,8 +434,8 @@ def draw(screen, game):
 	else:
 		rects.append(screen.blit(game.car.image, (game.car.x,game.car.y)))	
 	rects.append(screen.blit(game.scoreSurface, (10, 10)))
-	rects.append(screen.blit(game.livesSurface, (10, 35)))
-	rects.append(screen.blit(game.levelSurface, (10, 60)))
+	rects.append(screen.blit(game.levelSurface, (10, 35)))
+	rects.append(screen.blit(game.livesImage, (15, 75)))
 	rects.append(screen.blit(game.levelUpMessageSurface, (width/2 - 75, height/2)))
 	rects.append(screen.blit(game.bonusLifeSurface, (width/2 - 50, height/2+35)))
 	if(game.gameOverState):
