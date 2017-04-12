@@ -1,7 +1,7 @@
 import pygame
 from car import *
 from road import *
-from pothole import *
+from obstacle import *
 
 class Game(object):
 	def __init__(self, width, height):
