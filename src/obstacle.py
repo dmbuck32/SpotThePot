@@ -14,11 +14,20 @@ class Obstacle(object):
 		self.isMovingRight = False
 		self.isCollidable = True
 		self.name = name
-	
+                pygame.mixer.init()
+                pygame.mixer.pre_init(44100, 16, 2, 4096)
+                pygame.init()
+                
+                
 	def moveDown(self,speed):
 		if (self.name == 'Images/ambulance.png'):
 			self.y += speed + 2
 			self.rect.y += speed + 2
+
+			if pygame.mixer:
+				amb = os.path.join("music", 'ambulance_siren.wav')
+                                sounds = pygame.mixer.Sound(amb)
+				pygame.mixer.Sound.play(sounds, 0)
 		else:
 			self.y += speed + 1
 			self.rect.y += speed + 1

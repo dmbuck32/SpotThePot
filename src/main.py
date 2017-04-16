@@ -5,7 +5,25 @@ from road import *
 from obstacle import *
 from menu import *
 
+
+
+#move this to game if we want it to not play on the menu screen.
+#also if we want it to pause with the game we should just need to put 	pygame.mixer.music.pause()/unpause()
+pygame.mixer.init()
+pygame.mixer.pre_init(44100, 16, 2, 4096)
+pygame.init()
+#amb = os.path.join("music", 'ambulance_siren.wav')
+#sounds = pygame.mixer.Sound(amb)
+if pygame.mixer:
+	music = os.path.join("music", 'background_audio.wav')
+	pygame.mixer.music.load(music)
+	pygame.mixer.music.play(-1)
+
+
+
 # Global Variables
+
+
 height = 800
 width = 480
 timeUntilNextObstacle = 0
