@@ -26,6 +26,8 @@ class Game(object):
 		self.road = Road(width, height, 100, 370)
 		self.holelist = []
 		self.hole_counter = 0
+		self.wrench_counter = 0
+		self.wrench_on_screen = []
 		self.score_counter_threshold = 200
 		self.score_counter = 0
 		self.initDraw = True
@@ -43,8 +45,10 @@ class Game(object):
 		self.scoreSurface = self.myfont.render("Score: " + str(self.score),True,(255,255,255))
 		self.updateLevel()
 		
-	def updateLives(self):
-		self.lives -= 1
+	def updateLives(self, upOrDown):
+		if (not(upOrDown>0 and self.lives >= 4)):
+			self.lives += upOrDown
+		print self.lives
 		livesImageWidth = 65
 		livesImageHeight = 120
 		if self.lives >= 4:
@@ -59,7 +63,7 @@ class Game(object):
 			self.livesImage = pygame.transform.scale(pygame.image.load('Images/0lives.png').convert_alpha(),(livesImageWidth,livesImageHeight))
 			
 		self.livesSurface = self.myfont.render("Lives: " + str(self.lives),True,(255,255,255))
-		
+	
 	def updateLevel(self):
 		if ((self.score > 0) and (self.score % self.scoreLevelUpdater == 0)):
 			self.level += 1

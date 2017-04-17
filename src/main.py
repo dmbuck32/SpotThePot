@@ -3,6 +3,7 @@ from car import *
 from game import *
 from road import *
 from obstacle import *
+from wrench import *
 from menu import *
 
 
@@ -27,6 +28,7 @@ if pygame.mixer:
 height = 800
 width = 480
 timeUntilNextObstacle = 0
+timeUntilWrench = 500
 
 clk = pygame.time.Clock()
 FPS = 120
@@ -445,6 +447,8 @@ def draw(screen, game):
 #	pygame.time.delay(2)
 	for hole in game.holelist:
 		rects.append(screen.blit(hole.image, (hole.x, hole.y)))
+	for wrench in game.wrench_on_screen:
+		rects.append(screen.blit(wrench.image, (wrench.x, wrench.y)))
 	if((game.car.isMovingRight) == True):
 		rects.append(screen.blit(game.car.image_right, (game.car.x,game.car.y)))
 	elif((game.car.isMovingLeft) == True):
@@ -464,6 +468,7 @@ def update(game):
 	global timeUntilNextObstacle 
 	game.updateScoreCounter()
 	game.hole_counter += 1
+	game.wrench_counter += 1
 	if(game.hole_counter > timeUntilNextObstacle):
 		obstacle_name = choose_obstacle()
 		size = (50,50)
@@ -479,12 +484,21 @@ def update(game):
 		game.hole_counter = 0
 		timeUntilNextObstacle = random.randint((80-(game.score*2)),(170-(game.score*4)))
 		#timeUntilNextObstacle = random.randint(game.minTime,game.maxTime) # I think this should get harder with the levels
+	if(game.wrench_counter > timeUntilWrench):
+		game.wrench_on_screen.append(Wrench(game.road.lbound, game.road.rbound))
+		game.wrench_counter = 0		
+	for wrench in game.wrench_on_screen:
+		wrench.moveDown(game.score/game.scoreLevelUpdater)
+		if wrench.y > game.height:
+			game.wrench_on_screen.remove(wrench)
 	for hole in game.holelist:
 		hole.moveDown(game.score/game.scoreLevelUpdater)
 		if hole.y > game.height:
 			game.holelist.remove(hole)
 	if game.car.collided(game.holelist):
-		game.updateLives()
+		game.updateLives(-1)
+	if game.car.collided(game.wrench_on_screen):
+		game.updateLives(1)
 	if game.lives == 0:
 		return 0
 	return 1
