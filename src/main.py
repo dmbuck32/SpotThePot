@@ -513,7 +513,7 @@ def handle_keydown(game):
 			game.car.moveRight(game.score/game.scoreLevelUpdater)
 			
 def choose_obstacle():
-	choice = random.randint(1,8)
+	choice = random.randint(1,9)
 	if (choice == 0):return 'Images/pothole.png'
 	if (choice == 1):return 'Images/pothole1.png'
 	if (choice == 2):return 'Images/pothole2.png'
@@ -523,7 +523,14 @@ def choose_obstacle():
 	if (choice == 6):return 'Images/bottle2.png'
 	if (choice == 7):return 'Images/mouse.png'
 	if (choice == 8):return 'Images/ambulance.png'
-			
+	if (choice == 9 or choice == 10):
+		choice2 = random.randint(1,3)
+		if (choice2 == 1):
+			return 'Images/tree1.png'
+		if (choice2 == 2):
+			return 'Images/tree2.png'
+		if (choice2 == 3):
+			return 'Images/tree3.png'			
 # Run the script
 if __name__ == "__main__":
    main()

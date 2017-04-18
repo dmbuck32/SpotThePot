@@ -4,9 +4,15 @@ import random
 
 class Obstacle(object):
 	def __init__(self, left_bound, right_bound, name, (width, height)):
+		self.name = name
 		self.width = width
 		self.height = height
-		self.x = random.randrange(left_bound + 20, right_bound - self.width - 17)
+		if (self.name != 'Images/tree1.png' and self.name != 'Images/tree2.png' and self.name != 'Images/tree3.png'):
+			self.x = random.randrange(left_bound + 20, right_bound - self.width - 17)
+		elif(random.random() < 0.5):
+			self.x = random.randrange(0, left_bound-self.width)
+		else:
+			self.x = random.randrange(right_bound, right_bound+50)
 		self.y = -50
 		self.rect = pygame.Rect(self.x + 20,self.y + 20,self.width - 40,self.height - 40)
 		self.image = pygame.transform.scale(pygame.image.load(name).convert_alpha(),(self.width,self.height))
