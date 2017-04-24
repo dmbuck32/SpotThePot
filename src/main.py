@@ -77,8 +77,8 @@ def menu(screen):
 	# Menu Stuff
 	menu = cMenu(width/2, height - 200, 0, 0, 'vertical', 4, screen,
 			   [('Start Game', 1, start_button),
-				('FAQ', 2, FAQ_button),
-				('High Scores', 3, high_scores_button),
+				#('FAQ', 2, FAQ_button),
+				#('High Scores', 3, high_scores_button),
 				('Exit', 4, exit_button)])
 				
 	# Center the menu on the draw_surface (the entire screen here)
