@@ -5,7 +5,7 @@ from road import *
 from obstacle import *
 from wrench import *
 from menu import *
-
+from tree import *
 
 
 #move this to game if we want it to not play on the menu screen.
@@ -29,6 +29,7 @@ height = 800
 width = 480
 timeUntilNextObstacle = 0
 timeUntilWrench = 500
+timeUntilNextTree = 100;
 
 clk = pygame.time.Clock()
 FPS = 120
@@ -449,6 +450,8 @@ def draw(screen, game):
 		rects.append(screen.blit(hole.image, (hole.x, hole.y)))
 	for wrench in game.wrench_on_screen:
 		rects.append(screen.blit(wrench.image, (wrench.x, wrench.y)))
+	for tree in game.treelist:
+		rects.append(screen.blit(tree.image, (tree.x, tree.y)))
 	if((game.car.isMovingRight) == True):
 		rects.append(screen.blit(game.car.image_right, (game.car.x,game.car.y)))
 	elif((game.car.isMovingLeft) == True):
@@ -469,6 +472,7 @@ def update(game):
 	game.updateScoreCounter()
 	game.hole_counter += 1
 	game.wrench_counter += 1
+	game.tree_counter += 1
 	if(game.hole_counter > timeUntilNextObstacle):
 		obstacle_name = choose_obstacle()
 		size = (50,50)
@@ -487,6 +491,14 @@ def update(game):
 	if(game.wrench_counter > timeUntilWrench):
 		game.wrench_on_screen.append(Wrench(game.road.lbound, game.road.rbound))
 		game.wrench_counter = 0		
+	if(game.tree_counter > timeUntilNextTree):
+		tree_name = choose_tree()
+		game.treelist.append(Tree(game.road.lbound, game.road.rbound, tree_name))
+		game.tree_counter = 0
+	for tree in game.treelist:
+		tree.moveDown(game.score/game.scoreLevelUpdater)
+		if tree.y > game.height:
+			game.treelist.remove(tree)
 	for wrench in game.wrench_on_screen:
 		wrench.moveDown(game.score/game.scoreLevelUpdater)
 		if wrench.y > game.height:
@@ -512,8 +524,14 @@ def handle_keydown(game):
 		if(game.car.x + game.car.width < game.road.rbound):
 			game.car.moveRight(game.score/game.scoreLevelUpdater)
 			
+def choose_tree():
+	choice = random.randint(1,3)
+	if (choice == 1):return 'Images/tree1.png'
+	if (choice == 2):return 'Images/tree2.png'
+	if (choice == 3):return 'Images/tree3.png'
+			
 def choose_obstacle():
-	choice = random.randint(1,9)
+	choice = random.randint(1,8)
 	if (choice == 0):return 'Images/pothole.png'
 	if (choice == 1):return 'Images/pothole1.png'
 	if (choice == 2):return 'Images/pothole2.png'
@@ -523,14 +541,7 @@ def choose_obstacle():
 	if (choice == 6):return 'Images/bottle2.png'
 	if (choice == 7):return 'Images/mouse.png'
 	if (choice == 8):return 'Images/ambulance.png'
-	if (choice == 9 or choice == 10):
-		choice2 = random.randint(1,3)
-		if (choice2 == 1):
-			return 'Images/tree1.png'
-		if (choice2 == 2):
-			return 'Images/tree2.png'
-		if (choice2 == 3):
-			return 'Images/tree3.png'			
+					
 # Run the script
 if __name__ == "__main__":
    main()

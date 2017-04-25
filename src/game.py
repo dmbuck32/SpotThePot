@@ -28,6 +28,8 @@ class Game(object):
 		self.hole_counter = 0
 		self.wrench_counter = 0
 		self.wrench_on_screen = []
+		self.treelist = []
+		self.tree_counter = 0
 		self.score_counter_threshold = 200
 		self.score_counter = 0
 		self.initDraw = True
@@ -48,7 +50,7 @@ class Game(object):
 	def updateLives(self, upOrDown):
 		if (not(upOrDown>0 and self.lives >= 4)):
 			self.lives += upOrDown
-		print self.lives
+		#print self.lives
 		livesImageWidth = 65
 		livesImageHeight = 120
 		if self.lives >= 4:
@@ -68,9 +70,8 @@ class Game(object):
 		if ((self.score > 0) and (self.score % self.scoreLevelUpdater == 0)):
 			self.level += 1
 			self.levelUpMessageSurface = self.myfont.render("NEXT LEVEL!", True, (255,215, 0))
-			if self.level > 1 and self.level % 5 == 0 and self.lives < 4:
-				self.lives += 1 # Bonus life every 5 levels, if they can take it
-				self.livesSurface = self.myfont.render("Lives: " + str(self.lives),True,(255,255,255))
+			if self.level > 1 and self.level % 2 == 0 and self.lives < 4:
+				self.updateLives(1);
 				self.bonusLifeSurface = pygame.font.SysFont('Aria', 25).render("Bonus Life!", True, (255,215,0))
 			else: 
 				self.bonusLifeSurface = self.myfont.render("", True, (255,215,0))
